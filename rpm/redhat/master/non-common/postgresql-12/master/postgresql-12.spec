@@ -32,7 +32,7 @@
 # All Fedora releases now use Python3
 # Support Python3 on RHEL 7.7+ natively
 # RHEL 8 uses Python3
-%{!?plpython3:%global plpython3 1}
+%{!?plpython3:%global plpython3 0}
 # This is the list of contrib modules that will be compiled with PY3 as well:
 %global python3_build_list hstore_plpython jsonb_plpython ltree_plpython
 %endif
@@ -44,12 +44,12 @@
 %endif
 %endif
 
-%{!?pltcl:%global pltcl 1}
+%{!?pltcl:%global pltcl 0}
 %{!?plperl:%global plperl 1}
 %{!?ssl:%global ssl 1}
 %{!?test:%global test 1}
 %{!?runselftest:%global runselftest 0}
-%{!?uuid:%global uuid 1}
+%{!?uuid:%global uuid 0}
 %{!?xml:%global xml 1}
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
@@ -64,8 +64,8 @@
 %{!?llvm:%global llvm 0}
 %{!?sdt:%global sdt 0}
 %else
-%{!?llvm:%global llvm 1}
- %{!?sdt:%global sdt 1}
+%{!?llvm:%global llvm 0}
+ %{!?sdt:%global sdt 0}
 %endif
 %{!?selinux:%global selinux 1}
 %endif
@@ -1012,7 +1012,7 @@ sed 's/^PGVERSION=.*$/PGVERSION=%{version}/' <%{SOURCE3} > %{sname}.init
 %{__rm} -rf %{buildroot}%{_docdir}/pgsql
 
 # Quick hack for RHEL < 7 and not compiled with PL/Python3 support:
-%if 0%{?rhel} < 7 && ! 0%{?plpython3}
+%if 0%{?rhel} < 7 || ! 0%{?plpython3}
 %{__rm} -f %{buildroot}/%{pgbaseinstdir}/share/extension/hstore_plpython3u*
 %{__rm} -f %{buildroot}/%{pgbaseinstdir}/share/extension/jsonb_plpython3u*
 %{__rm} -f %{buildroot}/%{pgbaseinstdir}/share/extension/ltree_plpython3u*
